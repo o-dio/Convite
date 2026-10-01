@@ -2,7 +2,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #f0f2f5;
+  background-color: #666078;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
@@ -22,7 +22,7 @@ button{
   max-width: 800px;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: #666078;
   box-shadow: 0 0 20px rgba(0,0,0,0.05);
   padding: 40px 20px;
   box-sizing: border-box;
@@ -37,7 +37,7 @@ button{
 
 .intro h1 {
   color: #333;
-  line-height: 35px;
+  line-height: 50px;
 }
 
 .intro a {
@@ -107,7 +107,7 @@ button{
   font-weight: bold;
   border: none;
   border-radius: 12px;
-  background-color: #007bff;
+  background-color: #330136;
   color: white;
   cursor: pointer;
   transition: transform 0.1s;

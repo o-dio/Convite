@@ -48,7 +48,7 @@ const handleUberRedirect = () => {
         animate={{ opacity: 1, y: 0 }} 
         className="intro"
       >
-        <h1>O aniversário mais assustador da paróquia 🫣</h1>
+        <h1>O aniversário mais assustador da paróquia</h1>
         <p>Sábado, 10/10 • Minha Casinha</p>
         <p>👻 Chegar a partir das 20h 👻</p>
         <button className='Endereco' onClick={() => abrirEndereco()}>Como chegar</button>
