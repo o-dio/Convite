@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
@@ -35,6 +35,18 @@ export default function App() {
     }, 300);
   };
 
+  const carrosselRef = useRef(null);
+
+  useEffect(() => {
+    if (carrosselRef.current) {
+      const container = carrosselRef.current;
+
+      const centroExato = (container.scrollWidth - container.clientWidth) / 2;
+      
+      container.scrollLeft = centroExato;
+    }
+  }, []);
+
 const handleUberRedirect = () => {
     const url = "https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=-29.9565&dropoff[longitude]=-50.235361&dropoff[nickname]=Destino%20Selecionado";
     
@@ -51,11 +63,11 @@ const handleUberRedirect = () => {
         <h1>O aniversário mais assustador da paróquia</h1>
         <p>Sábado, 10/10 • Minha Casinha</p>
         <p>👻 Chegar a partir das 20h 👻</p>
-        <button className='Endereco' onClick={() => abrirEndereco()}>Como chegar</button>
+        <button className='btn-secundario' onClick={() => abrirEndereco()}>Como chegar</button>
         <p className="instrucao">Selecione seu grupo para confirmar presença:</p>
       </motion.div>
 
-      <div className="lista-grupos">
+      <div className="lista-grupos" ref={carrosselRef}>
         {Object.keys(convidadosDb).map((grupo) => (
           <button key={grupo} onClick={() => abrirNomes(grupo)} className="btn-largo">
             {grupo}
@@ -80,7 +92,7 @@ const handleUberRedirect = () => {
               <button className="btn-fechar" onClick={fecharModais}>X</button>
               <h2>{grupoSelecionado}</h2>
               <p>Quem é você?</p>
-              <div className="lista-nomes">
+              <div className="lista-nomes" ref={carrosselRef}>
                 {convidadosDb[grupoSelecionado].map((nome) => (
                   <button key={nome} onClick={() => abrirConfirmacao(nome)} className="btn-largo btn-secundario">
                     {nome}
@@ -153,7 +165,7 @@ const handleUberRedirect = () => {
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.792912577233!2d-50.23784512325086!3d-29.956634727212077!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95180d11a525a1bd%3A0x5005ce10025c4b24!2sLua%20Cheia%20Instituto%20Espiritual%20Xam%C3%A2nico!5e0!3m2!1spt-BR!2sbr!4v1790741707841!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                   </div>
                   <div className='botao-uber'>
-                    <button onClick={() => handleUberRedirect()}>Uber</button>
+                    <button onClick={() => handleUberRedirect()} className='btn-secundario'>Uber</button>
                   </div>
                 </div>
               </motion.div>
