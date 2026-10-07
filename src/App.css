@@ -21,7 +21,7 @@ button{
   min-height: 100vh;
   margin: 0 auto;
   background-color: #666078;
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
   padding: 40px 20px;
   box-sizing: border-box;
   position: relative;
@@ -30,12 +30,20 @@ button{
 .intro {
   text-align: center;
   margin-bottom: 40px;
-  color: #333;
+  color: #feeefff3;
   gap: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #5E1742;
+  border-radius: 15px;
+  padding: 0px 0px 30px;
+  
 }
 
 .intro h1 {
-  color: #333;
+  color: #feeeff;
   line-height: 50px;
 }
 
@@ -43,17 +51,18 @@ button{
   text-decoration: solid;
 }
 
-.instrucao {
-  color: #666;
-  margin-top: 20px;
-  font-size: 0.95rem;
-}
-
 .popup-endereco{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 10px;
+}
+
+.popup-endereco h1 {
+  color: #feeeff;
+  text-align: start;
+  font-size: larger;
+  margin: 0px 0px 3px;
 }
 
 .descricao-endereco{
@@ -82,25 +91,64 @@ button{
   margin: 2px;
 }
 
-.botao-uber{
+.botao-rotas{
   flex: 1;
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   padding: 7px 15px 0px;
 }
 
+.lista-nomes {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal h2 {
+  margin-bottom: 15px;
+}
+
 /* Botões dimensionados para toque (Touch targets generosos) */
-.lista-grupos, .lista-nomes {
+.lista-grupos {
   height: 80%;
   display: flex;
   gap: 15px;
   margin-top: 10px;
   overflow-x: auto;
   padding: 0px 30px 10px;
+  cursor: grab;
 
   -webkit-overflow-scrolling: touch;
 
   scroll-snap-type: x mandatory;
+}
+
+.lista-grupos:active {
+  cursor: grabbing;
+}
+
+.lista-grupos::-webkit-scrollbar {
+  height: 6px;
+}
+
+.lista-grupos::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.lista-grupos::-webkit-scrollbar-thumb {
+  background-color: #d1d5db; /* Um cinza claro e elegante */
+  border-radius: 10px;
+}
+
+.lista-grupos.sem-ima {
+  scroll-snap-type: none !important;
+  cursor: grabbing !important;
+}
+
+.lista-grupos.sem-ima .btn-largo {
+  cursor: grabbing !important;
 }
 
 .acoes-confirmacao{
@@ -126,6 +174,8 @@ button{
   flex: 0 0 auto;
   min-width: 160px;
   scroll-snap-align: center;
+  user-select: none; 
+  -webkit-user-select: none;
 }
 
 .btn-largo:active {
@@ -138,6 +188,12 @@ button{
   height: auto;
   border: none;
   padding: 7px 0px;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.45);
+}
+
+.btn-secundario:active {
+  transform: scale(0.98);
 }
 
 .btn-sucesso {
@@ -156,12 +212,14 @@ button{
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
   padding: 20px;
+  backdrop-filter: blur(4px); 
+  -webkit-backdrop-filter: blur(4px); 
 }
 
 .modal {
@@ -187,4 +245,21 @@ button{
   font-weight: bold;
   cursor: pointer;
   color: #feeeff;
+}
+
+.grupo-botoes-confirmar {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-principal-confirmar {
+  flex: 10; /* Faz o botão de confirmar ocupar a maior parte do espaço */
+}
+
+.btn-seta {
+  font-size: 1.5rem;
+  padding: 0;
+  background-color: #333;
+  flex: 1;
 }
