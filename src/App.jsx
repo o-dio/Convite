@@ -171,7 +171,8 @@ const handleRotasRedirect = () => {
 
       <div
         className="footer">
-        <h2>Uma realização, Dioniso & ✨ Vitória ✨</h2>
+        <h2>Uma realização,</h2>
+        <h2>Dioniso & ✨ Vitória ✨</h2>
       </div>
 
       <AnimatePresence>
