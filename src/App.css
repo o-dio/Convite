@@ -25,9 +25,13 @@ button{
   padding: 40px 20px;
   box-sizing: border-box;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .intro {
+  flex: 1;
   text-align: center;
   margin-bottom: 40px;
   color: #feeefff3;
@@ -112,7 +116,8 @@ button{
 
 /* Botões dimensionados para toque (Touch targets generosos) */
 .lista-grupos {
-  height: 80%;
+  flex: 10;
+  height: 100%;
   display: flex;
   gap: 15px;
   margin-top: 10px;
@@ -160,7 +165,7 @@ button{
 
 .btn-largo {
   width: 60%;
-  height: 300px;
+  height: 40vh;
   padding: 16px;
   font-size: 1rem;
   font-weight: bold;
@@ -202,8 +207,8 @@ button{
 }
 
 .btn-recusar {
-  background-color: transparent;
-  color: #dc3545;
+  background-color: #330136;
+  color: #dc3546;
   border: 1px solid #dc3545;
   height: auto;
 }
@@ -214,6 +219,7 @@ button{
   inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 100;
@@ -262,4 +268,44 @@ button{
   padding: 0;
   background-color: #333;
   flex: 1;
+}
+
+.secao-contribuicao {
+  margin: 15px 0;
+  min-height: 40px; /* Evita que o modal fique pulando de tamanho bruscamente */
+  color: #feeeff;
+  padding: 15px 0px 0px;
+}
+
+.btn-tag {
+  background-color: #333;
+  color: #feeeff;
+  border: 1px solid #dc3545;
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0 5px;
+  transition: all 0.2s;
+}
+
+.btn-tag:hover {
+  background-color: #d1d5db;
+}
+
+/* Quando o usuário clica na tag, ela fica colorida indicando seleção */
+.btn-tag.selecionado {
+  background-color: #28a745;
+  color: white;
+}
+
+.footer {
+  flex: 1;
+  background-color: #330136;
+  color: #feeeff;
+  padding: 2%;
+  border: 1px solid #fbacff;
+  border-radius: 10px;
+  margin: 2px;
 }

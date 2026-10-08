@@ -1,17 +1,48 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ref, push } from "firebase/database";
+import { db } from "./firebase"; 
 import './App.css';
 
+function Fantasma({ top, left, right, bottom, delay }) {
+  return (
+   <motion.img
+      src="/Fantasma.svg"
+      style={{
+        position: 'fixed',
+        top, left, right, bottom,
+        zIndex: 0,
+        width: '60px',
+        opacity: 0.6,
+        pointerEvents: 'none'
+      }}
+      initial={{ y: 0 }}
+      animate={{ y: [-15, 15, -15] , x: [-10, 10, -10] }}
+      transition={{
+        duration: 3,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: delay
+      }}
+    />
+  );
+}
+
 const convidadosDb = {
-  "Família Silva": ["João Silva", "Maria Silva", "Tia Joana"],
-  "Amigos da Faculdade": ["Carlos", "Ana", "Lucas"],
-  "Trabalho": ["Chefe", "Colega 1"]
+  "Pantha Rei (Finada Polishop)" : ["Bianca", "Fonseca", "Pietro e Girl", "Luquinhas & Boy", "Paulinho e Girl"],
+  "Totvs — Juritis": ["Luis Matta", "Caio Furtado", "Renan Ferraz", "Rodrigo Perri"],
+  "Masters of Coup": ["Brenda", "João", "Clara", "Alan", "Renata", "Mariana"],
+  "Quem que convidou? 🙄": ["Maby", "Brenda", "Vitor", "Bernardo Benicio"],
+  "Masters of Overcooked": ["Gustavo", "Larissa"],
+  "Masters of Programacao": ["Germano", "Antony", "Gustavo Daniel", "Vitor Dahmer", "Vitor Emannuel"]
 };
 
 export default function App() {
   const [grupoSelecionado, setGrupoSelecionado] = useState(null);
   const [nomeSelecionado, setNomeSelecionado] = useState(null);
   const [modalAberto, setModalAberto] = useState(null); 
+  const [contribuicao, setContribuicao] = useState(""); 
+  const [mostrarMenuContribuicao, setMostrarMenuContribuicao] = useState(false); 
 
   const abrirNomes = (grupo) => {
     setGrupoSelecionado(grupo);
@@ -32,6 +63,8 @@ export default function App() {
     setTimeout(() => {
       setGrupoSelecionado(null);
       setNomeSelecionado(null);
+      setContribuicao(""); 
+      setMostrarMenuContribuicao(false); 
     }, 300);
   };
 
@@ -95,7 +128,10 @@ const handleRotasRedirect = () => {
 };
 
   return (
-    <main className="mobile-container">
+  <main className="mobile-container">
+      <Fantasma delay={0} left="5%" top="10%"/>
+      <Fantasma delay={1.5} right="10%" top="40%"/>
+      <Fantasma delay={2} left="15%" bottom="20%"/>
       <motion.div 
         initial={{ opacity: 0, y: -20 }} 
         animate={{ opacity: 1, y: 0 }} 
@@ -131,6 +167,11 @@ const handleRotasRedirect = () => {
               {grupo}
             </button>
           ))}
+      </div>
+
+      <div
+        className="footer">
+        <h2>Uma realização, Dioniso & ✨ Vitória ✨</h2>
       </div>
 
       <AnimatePresence>
@@ -179,27 +220,93 @@ const handleRotasRedirect = () => {
             >
               <button className="btn-fechar" onClick={fecharModais}>X</button>
               <h2>Olá, {nomeSelecionado}!</h2>
+              
               <div className="acoes-confirmacao">
-                <div className="grupo-botoes-confirmar">
-                  <button 
-                    className="btn-largo btn-sucesso btn-principal-confirmar"
-                    onClick={() => {
-                      alert(`Vai salvar no Firebase: ${nomeSelecionado} (Sem opção de comida)`);
+                <button 
+                  className="btn-largo btn-sucesso"
+                  onClick={async () => {
+                    try {
+                      const confirmadosRef = ref(db, 'convidados'); 
+
+                      await push(confirmadosRef, {
+                        nome: nomeSelecionado,
+                        contribuicao: contribuicao || 'Nenhuma',
+                        status: 'Confirmado'
+                      });
+                      
+                      alert("Presença confirmada com sucesso! 🎉");
                       fecharModais();
-                    }}
-                  >
-                    Confirmar Presença
-                  </button>
-                  <button 
-                    className="btn-largo btn-sucesso btn-seta" 
-                    onClick={() => setModalAberto('comidinha')}
-                  >
-                    ➔
-                  </button>
-                </div>
-                <button className="btn-largo btn-recusar" onClick={fecharModais}>
+                    } catch (erro) {
+                      console.error("Erro ao salvar:", erro);
+                      alert("Ops, deu um erro. Tente novamente!");
+                    }
+                  }}
+                >
+                  Confirmar Presença
+                </button>
+                <button 
+                  className="btn-largo btn-recusar"
+                  onClick={async () => {
+                    try {
+                      const confirmadosRef = ref(db, 'convidados'); 
+
+                      await push(confirmadosRef, {
+                        nome: nomeSelecionado,
+                        status: 'Não irá'
+                      });
+                      
+                      alert("Que pena! Sentiremos sua falta. 😢");
+                      fecharModais();
+                    } catch (erro) {
+                      console.error("Erro ao salvar:", erro);
+                    }
+                  }}>
                   Não poderei ir
                 </button>
+              </div>
+              <div className="secao-contribuicao">
+                {!mostrarMenuContribuicao ? (
+                  <button 
+                    className="btn-tag" 
+                    onClick={() => setMostrarMenuContribuicao(true)}
+                  >
+                    {contribuicao ? `✅ Levando: ${contribuicao}` : "👀"}
+                  </button>
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }} 
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <h2 style={{fontSize: '0.85rem', marginBottom: '8px'}}>Como prefere contribuir?</h2>
+                    <button 
+                      className={`btn-tag ${contribuicao === 'Comida para dividir' ? 'selecionado' : ''}`}
+                      onClick={() => {
+                        setContribuicao('Comida para dividir');
+                        setMostrarMenuContribuicao(false); // Esconde as opções após escolher
+                      }}
+                    >
+                      Levar comida 🍕
+                    </button>
+                    <button 
+                      className={`btn-tag ${contribuicao === 'Pix' ? 'selecionado' : ''}`}
+                      onClick={() => {
+                        setContribuicao('Pix');
+                        setMostrarMenuContribuicao(false); // Esconde as opções após escolher
+                      }}
+                    >
+                      15zão no Pix 💸
+                    </button>
+                    <button 
+                      className={`btn-tag ${contribuicao === '' ? 'selecionado' : ''}`}
+                      onClick={() => {
+                        setContribuicao(''); // Retorna ao estado vazio
+                        setMostrarMenuContribuicao(false); 
+                      }}
+                    >
+                      Não levar nada 😔
+                    </button>
+                  </motion.div>
+                )}
               </div>
             </motion.div>
           </motion.div>
@@ -244,10 +351,10 @@ const handleRotasRedirect = () => {
           </motion.div>
         )}
 
-        {modalAberto === 'comidinha' && (
+{modalAberto === 'comidinha' && (
           <motion.div
             className="overlay"
-            onClick={setModalAberto('confirmacao')}
+            onClick={() => setModalAberto('confirmacao')} // Clicar no fundo embaçado volta para confirmação
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -259,7 +366,10 @@ const handleRotasRedirect = () => {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 50, opacity: 0 }}
             >
-              <button className="btn-fechar" onClick={setModalAberto('confirmacao')}>X</button>
+              {/* Trocamos o X por uma setinha e a função fecharModais pelo setModalAberto */}
+              <button className="btn-fechar" onClick={() => setModalAberto('confirmacao')}>
+                ←
+              </button>
               <h2>E a comidinha? 🍕</h2>
               <p>Como você prefere contribuir, {nomeSelecionado}?</p>
               <div className="acoes-confirmacao">
